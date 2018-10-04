@@ -14,5 +14,8 @@
     "less-middleware": "^3.0.1",
     "morgan": "~1.9.0",
     "pug": "^2.0.3"
+  },
+  "engines": {
+    "node": "8.x"
   }
 }
