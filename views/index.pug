@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Under Construction
+  script(type='text/javascript' src='/javascripts/dropzone.js')
+  script(type='text/javascript' src='/javascripts/dropzone-audioupload-options.js')
+  link(rel='stylesheet', href='/stylesheets/dropzone.css')
+  form#wave-upload.dropzone(method='post' action='/upload')
+    div.fallback
+      input(name='waves' type='file')
