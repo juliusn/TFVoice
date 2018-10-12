@@ -4,6 +4,8 @@ block content
   script(type='text/javascript' src='/javascripts/dropzone.js')
   script(type='text/javascript' src='/javascripts/dropzone-audioupload-options.js')
   link(rel='stylesheet', href='/stylesheets/dropzone.css')
-  form#wave-upload.dropzone(method='post' action='/upload')
+  form#wave-upload.dropzone(method='post' action='/upload' enctype='multipart/form-data')
     div.fallback
-      input(name='waves' type='file')
+      input(name='wave' type='file' multiple)
+      div.form-group.pull-right
+        button#batch-upload.btn.btn-danger(type='submit') Upload
