@@ -1,0 +1,17 @@
+extends pug-bootstrap/_bootstrap.pug
+
+block body
+  script(type='text/javascript' src='/socket.io/socket.io.js')
+  script.
+    const socket = io();
+    socket.on('speech_data', function(data) {
+      console.log(data);
+    });
+  include includes/dropzone.pug
+  select#inputdevices
+  canvas(width='600' height='100')#visualiser
+  button.btn.btn-primary#start-recording Record
+  button.btn.btn-primary#stop-recording Stop
+
+block scripts
+  script(type='text/javascript' src='/javascripts/record.js')
