@@ -2,53 +2,65 @@ $(() => {
   const menu = document.getElementById('inputdevices');
   const canvas = document.getElementById('visualiser');
   const canvasCtx = canvas.getContext('2d');
-  let recorder;
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const analyser = audioCtx.createAnalyser();
-  let drawVisual;
+  let recorder;
+  let source;
   menu.onchange = () => {
     updateSource();
   };
   navigator.mediaDevices.enumerateDevices().then((devices) => {
     devices.forEach((device) => {
-      if (device.kind == 'audioinput') {
+      if (device.kind === 'audioinput') {
         const item = document.createElement('option');
         item.innerHTML = device.label;
         item.value = device.deviceId;
         menu.appendChild(item);
       }
     });
+    updateSource();
   });
 
   $('#start-recording').click(() => {
-    if (recorder.state == 'inactive') recorder.start();
+    if (recorder.state === 'inactive') recorder.start();
   });
 
   $('#stop-recording').click(() => {
-    if (recorder.state != 'inactive') recorder.stop();
+    if (recorder.state !== 'inactive') recorder.stop();
   });
 
+  /**
+   * Use selected audio input device and forward stream to
+   * recorder and visualizer
+   */
   function updateSource() {
-    window.cancelAnimationFrame(drawVisual);
     const input = menu.value;
     const constraints = {
       audio: {deviceId: input ? {exact: input} : undefined},
       video: false,
     };
-    console.log('device id', constraints.audio.deviceId);
+
     navigator.mediaDevices.getUserMedia(constraints).
         then((stream) => {
-          const source = audioCtx.createMediaStreamSource(stream);
+          if (source) source.disconnect(analyser);
+          source = audioCtx.createMediaStreamSource(stream);
           source.connect(analyser);
-          recorder = recorder || new MediaRecorder(stream);
-          recorder.ondataavailable = (e) => {
-            console.log('data available');
+          recorder = new MediaRecorder(stream);
+          recorder.ondataavailable = dataHandler;
+          recorder.onstart = (e) => {
+            console.log('recording');
           };
-          visualize();
+          recorder.onstop = (e) => {
+            console.log('stopped');
+          };
+          initOscilloscope();
         });
   }
 
-  function visualize() {
+  /**
+   * Start visualizing analyzer data with oscilloscope
+   */
+  function initOscilloscope() {
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     analyser.fftSize = 2048;
@@ -56,8 +68,11 @@ $(() => {
     const HEIGHT = canvas.height;
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
+    /**
+     * Draw to canvas
+     */
     function draw() {
-      drawVisual = window.requestAnimationFrame(draw);
+      window.requestAnimationFrame(draw);
       analyser.getByteTimeDomainData(dataArray);
       canvasCtx.fillStyle = 'rgb(200, 200, 200)';
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -78,10 +93,60 @@ $(() => {
       }
       canvasCtx.lineTo(canvas.width, canvas.height / 2);
       canvasCtx.stroke();
-    };
+    }
 
     draw();
   }
 
-  updateSource();
+  /**
+   * Send recording to API
+   * @param {event} e ondataavailable event
+   */
+  function dataHandler(e) {
+    console.log('data', e.data);
+    console.log('data size ', bytesToSize(e.data.size));
+    const formData = new FormData();
+    formData.append('recording', e.data);
+    const xhr = new XMLHttpRequest();
+    // xhr.responseType = 'formdata';
+    xhr.open('POST', '/upload/recording', true);
+    xhr.onload = function(ev) {
+      console.log('uploaded');
+    };
+    xhr.upload.addEventListener('progress', updateProgress);
+    xhr.upload.addEventListener('load', transferComplete);
+    xhr.upload.addEventListener('error', transferFailed);
+    xhr.upload.addEventListener('abort', transferCanceled);
+    xhr.send(formData);
+
+    function updateProgress(ev) {
+      if (ev.lengthComputable) {
+        const complete = ev.loaded / ev.total * 100;
+        console.log('uploaded ' + complete.toFixed(2) + ' %');
+      }
+    }
+
+    function transferComplete(ev) {
+      console.log('transfer complete');
+    }
+
+    function transferFailed(ev) {
+      console.log('transfer failed');
+    }
+
+    function transferCanceled(ev) {
+      console.log('transfer canceled');
+    }
+
+    /**
+     * @param {number} bytes
+     * @return {string} String representation of the size
+     */
+    function bytesToSize(bytes) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+      if (bytes === 0) return '0 Byte';
+      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+      return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    }
+  }
 });
