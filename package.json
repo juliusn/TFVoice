@@ -19,6 +19,7 @@
     "morgan": "~1.9.0",
     "multer": "^1.4.0",
     "node-wav": "latest",
+    "pm2": "^3.2.2",
     "pug": "^2.0.3",
     "socket.io": "^2.1.1",
     "sox-stream": "latest",
