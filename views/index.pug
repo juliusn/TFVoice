@@ -7,11 +7,20 @@ block body
     socket.on('speech_data', function(data) {
       console.log(data);
     });
+  nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
+    a.navbar-brand(href='#') VoiceX
+    button.navbar-toggler(type='button', data-toggle='collapse', aria-controls='#navbar', data-target='#navbar', aria-expanded='false', aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    div.collapse.navbar-collapse.justify-content-md-center#navbar
+      ul.navbar-nav
+        li.nav-item.active
+        select#inputdevices
+        canvas(width='50' height='30')#visualiser
+        button.btn.btn-primary#start-recording Record
+        button.btn.btn-primary#stop-recording Stop
+
   include includes/dropzone.pug
-  select#inputdevices
-  canvas(width='600' height='100')#visualiser
-  button.btn.btn-primary#start-recording Record
-  button.btn.btn-primary#stop-recording Stop
+
 
 block scripts
   script(type='text/javascript' src='/javascripts/record.js')

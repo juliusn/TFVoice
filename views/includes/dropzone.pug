@@ -1,7 +1,7 @@
 link(rel='stylesheet', href='/stylesheets/dropzone.css')
 script(type='text/javascript' src='/javascripts/dropzone/dropzone.js')
 script(type='text/javascript' src='/javascripts/dropzone/dropzone-audioupload-options.js')
-form#wave-upload.dropzone(method='post' action='/upload/file' enctype='multipart/form-data')
+form#wave-upload.dropzone.btn-primary.d-flex.justify-content-center.align-items-center(method='post' action='/upload/file' enctype='multipart/form-data')
   div.fallback
     input(name='wave' type='file' multiple)
     div.form-group.pull-right
