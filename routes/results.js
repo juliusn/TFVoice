@@ -3,7 +3,7 @@ const router = new express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('data', {title: 'VoiceX'});
+  res.render('results', {title: 'VoiceX'});
 });
 
 module.exports = router;

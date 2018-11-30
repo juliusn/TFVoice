@@ -1,114 +1,108 @@
 a, a:visited {
-  color:#333;
+    color: #ffffff;
 }
 
 #container {
-  padding-top:20px;
-  width: 980px;
-  border-left: 2px #ddd solid;
-  border-right: 2px #ddd solid;
+    padding-top: 20px;
+    width: 980px;
+    border-left: 2px #ddd solid;
+    border-right: 2px #ddd solid;
 }
 
 header {
-  padding: 10px;
+    padding: 10px;
 }
 
 #book-title {
-  font-family: georgia, "times new roman", times, serif;
-  color: #555;
-  font-size: 2.3em;
-  text-align: center;
+    color: #ffffff;
+    font-size: 2.3em;
+    text-align: center;
 }
 
 #text-select {
-  float:right;
-  margin-right: 10px;
+    float: right;
+    margin-right: 10px;
 }
 
 #vis {
-  overflow: hidden;
-  position: relative;
+    background-color: rgb(46, 51, 56);
+    overflow: hidden;
+    position: relative;
 }
 
 #status {
-  padding:0 0 20px 20px;
+    padding: 0 0 20px 20px;
 }
 
 #controls {
-  padding: 20px;
-  background-color: #eee;
-  margin: 10px;
-  width: 350px;
+    padding: 20px;
+    background-color: #eee;
+    margin: 10px;
+    width: 350px;
 }
 
 #bubble-background {
-  /* fill: none; */
-  fill: rgb(245, 245, 245);
-  pointer-events: all;
+    /* fill: none; */
+    fill: rgb(46, 51, 56);
+    pointer-events: all;
 }
 
 .bubble-node {
-  /* fill: #d1e0f3; */
-  fill: rgb(201, 201, 201);
+    fill: #007bff;
+    transition: fill .15s ease-in-out;
 }
 
 /* colors based on improvement */
 
 .bubble-node-good {
-  fill: rgb(71, 255, 65);
+    fill: rgb(71, 255, 65);
 }
 
 .bubble-node-neutral {
-  fill: rgb(252, 255, 65);
+    fill: #007bff;
 }
 
 .bubble-node-bad {
-  fill: rgb(255, 65, 65);
+    fill: rgb(255, 65, 65);
 }
 
 /* end */
 
 .bubble-hover {
-  /* fill: #b8c7d9; */
-  /* fill: rgb(218, 218, 218); */
-  stroke: rgb(48, 48, 48);
-  stroke-width: 1px;
+    fill: #3697ff;
 }
 
 .bubble-selected {
-  /* fill: #a8c8ee;  */
-  /*fill: rgb(180, 180, 180);*/
-  /* stroke: #6081a3; */
-  stroke: rgb(48, 48, 48);
-  stroke-width: 2px;
+    /* fill: #a8c8ee;  */
+    /*fill: rgb(180, 180, 180);*/
+    /* stroke: #6081a3; */
+    fill: #56a7ff;
 }
 
 .active {
-  color: rgb(48, 48, 48);
-  font-size: 32px;
+    color: rgb(48, 48, 48);
+    font-size: 32px;
 }
 
 a.bubble-label {
-  font-family: georgia, "times new roman", times, serif;
-  color: inherit;
-  cursor: pointer;
-  display: block;
-  text-align: center;
-  text-decoration: none;
-  line-height: 1em;
-  position: absolute;
+    color: #ffffff;
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1em;
+    position: absolute;
 }
 
-
 .bubble-label .bubble-label-value {
-  font: 11px sans-serif;
-  white-space: nowrap;
+    font: 11px sans-serif;
+    white-space: nowrap;
 }
 
 footer p {
-  text-align: center;
-  padding-top:20px;
-  padding-bottom:20px;
-  font: 13px sans-serif;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font: 13px sans-serif;
 }
 

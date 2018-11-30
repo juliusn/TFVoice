@@ -182,7 +182,7 @@ Bubbles = () ->
     # the styling comes from the css
     node.enter()
       .append("a")
-      .attr("class", "bubble-node-neutral")
+      .attr("class", "bubble-node")
       #.attr("class", "bubble-node-good")
       #.attr("class", "bubble-node-bad")
       .attr("xlink:href", (d) -> "##{encodeURIComponent(idValue(d))}")
