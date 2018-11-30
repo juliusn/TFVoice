@@ -23,6 +23,8 @@ app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/d3', express.static(path.join(__dirname, '/node_modules/d3/dist/')));
+app.use('/less',
+    express.static(path.join(__dirname, '/node_modules/less/dist/')));
 
 const sess = {
   secret: 'secret',

@@ -13,10 +13,36 @@ block body
       span.navbar-toggler-icon
     div.collapse.navbar-collapse.justify-content-md-center#navbar
       ul.navbar-nav
-        li.nav-item.active
+        li.nav-item.dropdown
+          button.btn.btn-secondary.dropdown-toggle#dd-profile(data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Profile
+            img(src='/images/user.png').icon-user.float-left
+          div.dropdown-menu(aria-labelledby='dd-profile')
+            a.dropdown-item(href='#') Settings
+            a.dropdown-item(href='#') Privacy
+            a.dropdown-item(href='#') Log Out
+
+        li.nav-item.dropdown
+          button.btn.btn-secondary.dropdown-toggle#dd-recordings(data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Recordings
+          div.dropdown-menu(aria-labelledby='dd-recordings')
+            a.dropdown-item(href='#') Recording 2018-11-12
+            a.dropdown-item(href='#') Upload 2018-11-10
+            a.dropdown-item(href='#') Upload 2018-11-08
+            a.dropdown-item(href='#') Recording 2018-11-04
+            a.dropdown-item(href='#') Upload 2018-11-04
+            a.dropdown-item(href='#') Recording 2018-11-01
+            a.dropdown-item(href='#') Recording 2018-10-29
+            a.dropdown-item(href='#') Recording 2018-10-28
+            a.dropdown-item(href='#') Recording 2018-10-21
+
+        li.nav-item
+          button.btn.btn-secondary Progress
+            img(src='/images/progress.png').icon-user.float-left
+
+
         select#inputdevices
         canvas(width='50' height='30')#visualiser
-        button.btn.btn-primary#start-recording Record
+        button.btn.btn-danger#start-recording Record
+          img(src='/images/record.png').icon-user.float-left
         button.btn.btn-primary#stop-recording Stop
 
   block content
