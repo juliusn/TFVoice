@@ -8,6 +8,7 @@
   "dependencies": {
     "@tensorflow/tfjs": "^0.13.1",
     "cookie-parser": "~1.4.3",
+    "d3": "^5.7.0",
     "debug": "^4.0.1",
     "deepspeech": "^0.3.0",
     "express": "~4.16.0",

@@ -6,6 +6,7 @@ const lessMiddleware = require('less-middleware');
 const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const uploadRouter = require('./routes/upload');
+const resultsRouter = require('./routes/results');
 const Server = require('socket.io');
 const io = new Server();
 const app = express();
@@ -21,6 +22,8 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/d3', express.static(path.join(__dirname, '/node_modules/d3/dist/')));
+
 const sess = {
   secret: 'secret',
   resave: true,
@@ -44,6 +47,7 @@ io.on('connect', (socket) => {
 });
 app.use('/', indexRouter);
 app.use('/upload', uploadRouter);
+app.use('/results', resultsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
