@@ -21,12 +21,14 @@ $(() => {
     updateSource();
   });
 
-  $('#start-recording').click(() => {
-    if (recorder.state === 'inactive') recorder.start();
-  });
-
-  $('#stop-recording').click(() => {
-    if (recorder.state !== 'inactive') recorder.stop();
+  $('#toggle-recording').click(function() {
+    if (recorder.state === 'inactive') {
+      $(this).html($(this).html().replace($(this).text(), 'Stop'));
+      recorder.start();
+    } else {
+      $(this).html($(this).html().replace($(this).text(), 'Record'));
+      recorder.stop();
+    }
   });
 
   /**
@@ -74,10 +76,14 @@ $(() => {
     function draw() {
       window.requestAnimationFrame(draw);
       analyser.getByteTimeDomainData(dataArray);
-      canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+      canvasCtx.fillStyle = recorder.state === 'inactive' ?
+          '#6c757d' :
+          '#da3a4a';
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
       canvasCtx.lineWidth = 2;
-      canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+      canvasCtx.strokeStyle = recorder.state === 'inactive' ?
+          '#aab3bb' :
+          '#ffffff';
       canvasCtx.beginPath();
       const sliceWidth = WIDTH * 1.0 / bufferLength;
       let x = 0;

@@ -6,6 +6,7 @@ const clear = util.promisify(fs.unlink);
 const multer = require('multer');
 const UPLOAD_PATH = 'tmp/uploads/';
 const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
 const dsBinder = require('../libraries/deepspeech/dsbinder');
 const uploadWave = multer({
   dest: UPLOAD_PATH,
@@ -37,18 +38,41 @@ router.post('/file', uploadWave.single('wave'), (req, res) => {
     socket.emit('speech_data', data);
     clear(file.path);
   });
-  console.log('Bound');
 });
 
 router.post('/recording', uploadRecording.single('recording'), (req, res) => {
-  const file = req.file;
-  console.log('file', req.file);
   res.sendStatus(200);
+  const file = req.file;
+  const wavPath = path.join(UPLOAD_PATH, file.filename + '.wav');
   const socket = req.app.clients.get(req.sessionID);
-  dsBinder.bind(file.path).then((data) => {
-    socket.emit('speech_data', data);
-    clear(file.path);
-  });
+  // const stream = fs.createWriteStream(wavPath);
+  ffmpeg().
+      input(file.path).
+      format('wav').
+      on('start', (commandLine) => {
+        console.log(`Spawned Ffmpeg with command: ${commandLine}`);
+      }).
+      on('codecData', (data) => {
+        console.log(`Input is ${data.audio}`);
+      }).
+      on('progress', (progress) => {
+        console.log(`Processing: ${progress.percent}%`);
+      }).
+      on('stderr', (stderrLine) => {
+        console.log(`Stderr output: ${stderrLine}`);
+      }).
+      on('error', (err) => {
+        console.error(`Transcoding error: ${err}`);
+        throw err;
+      }).
+      on('end', () => {
+        console.log('Processing finished');
+        clear(file.path);
+        dsBinder.bind(wavPath).then((data) => {
+          socket.emit('speech_data', data);
+          clear(wavPath);
+        });
+      }).save(wavPath);
 });
 
 module.exports = router;

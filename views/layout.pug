@@ -1,14 +1,9 @@
 extends pug-bootstrap/_bootstrap.pug
 
 block body
-  script(type='text/javascript' src='/socket.io/socket.io.js')
-  script.
-    const socket = io();
-    socket.on('speech_data', function(data) {
-      console.log(data);
-    });
   nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
     a.navbar-brand(href='#') VoiceX
+    span#connection.badge.badge-danger(data-toggle='tooltip', data-placement='bottom', title='Unable to connect to service') Disconnected
     button.navbar-toggler(type='button', data-toggle='collapse', aria-controls='#navbar', data-target='#navbar', aria-expanded='false', aria-label='Toggle navigation')
       span.navbar-toggler-icon
     div.collapse.navbar-collapse.justify-content-md-center#navbar
@@ -38,17 +33,36 @@ block body
           button.btn.btn-secondary Progress
             img(src='/images/progress.png').icon-user.float-left
 
-
         select#inputdevices
         canvas(width='50' height='30')#visualiser
-        button.btn.btn-danger#start-recording Record
+        button.btn.btn-danger#toggle-recording Record
           img(src='/images/record.png').icon-user.float-left
-        button.btn.btn-primary#stop-recording Stop
 
   block content
 
 
-
-
 block scripts
   script(type='text/javascript' src='/javascripts/record.js')
+  script(type='text/javascript' src='/socket.io/socket.io.js')
+  script.
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    const socket = io();
+    socket.on('speech_data', function(data) {
+      console.log(data);
+    });
+    socket.on('disconnect', function(reason) {
+      $('#connection').
+          removeClass('badge-success').
+          addClass('badge-danger').
+          html('Disconnected').
+          attr('data-original-title', 'Disconnected from service:\n' + reason);
+    });
+    socket.on('connect', function() {
+      $('#connection').
+          removeClass('badge-danger').
+          addClass('badge-success').
+          html('Connected').
+          attr('data-original-title', 'Connected to service');
+    });

@@ -25,6 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/d3', express.static(path.join(__dirname, '/node_modules/d3/dist/')));
 app.use('/less',
     express.static(path.join(__dirname, '/node_modules/less/dist/')));
+app.use('/popper',
+    express.static(path.join(__dirname, '/node_modules/popper.js/dist/umd/')));
 
 const sess = {
   secret: 'secret',
