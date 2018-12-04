@@ -345,7 +345,7 @@ Bubbles = () ->
       d3.select("#status").html("<h3><span class=\"active\">#{id}</span></br>Times used: <span>#{rValue}</span></br>Previous: </h3>")
     else
       #d3.select("#status").html("<h3>No word is active</h3>")
-      d3.select("#status").html("<h3>Click on a word to select it</h3>")
+      # d3.select("#status").html("<h3>Click on a word to select it</h3>")
 
   # ---
   # hover event
@@ -421,7 +421,6 @@ texts = [
   {key:"test2",file:"test2.json",name:"Test 2"}
 ]
 ###
-
 texts = [
   {key:"audio1",file:"test.json",name:"Audio 1"}
   {key:"audio2",file:"test2.json",name:"Audio 2"}
@@ -438,8 +437,8 @@ $ ->
   # function that is called when
   # data is loaded
   # ---
-  display = (data) ->
-    plotData("#vis", data, plot)
+  # display = (data) ->
+  #   plotData("#vis", data, plot)
 
   # we are storing the current text in the search component
   # just to make things easy
@@ -468,9 +467,6 @@ $ ->
       location.search = encodeURIComponent(key)
 
   # set the book title from the text name
-  d3.select("#book-title").html(text.name)
+  d3.select("#book-title").html(recording.text)
 
-  # load our data
-  #d3.csv("data/#{text.file}", display)
-
-  d3.json("data/#{text.file}", display)
+  plotData("#vis", result, plot)

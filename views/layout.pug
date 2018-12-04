@@ -49,9 +49,6 @@ block scripts
       $('[data-toggle="tooltip"]').tooltip();
     });
     const socket = io();
-    socket.on('speech_data', function(data) {
-      console.log(data);
-    });
     socket.on('disconnect', function(reason) {
       $('#connection').
           removeClass('badge-success').

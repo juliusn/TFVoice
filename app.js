@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const lessMiddleware = require('less-middleware');
 const logger = require('morgan');
+const mongoose = require('mongoose');
 const indexRouter = require('./routes/index');
 const uploadRouter = require('./routes/upload');
 const resultsRouter = require('./routes/results');
@@ -69,4 +70,11 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+mongoose.connect('mongodb://localhost/tfvoice', {useNewUrlParser: true});
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
+db.once('open', () => {
+  console.log('Connected to database');
+});
 module.exports = app;

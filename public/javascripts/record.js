@@ -48,13 +48,7 @@ $(() => {
           source = audioCtx.createMediaStreamSource(stream);
           source.connect(analyser);
           recorder = new MediaRecorder(stream);
-          recorder.ondataavailable = dataHandler;
-          recorder.onstart = (e) => {
-            console.log('recording');
-          };
-          recorder.onstop = (e) => {
-            console.log('stopped');
-          };
+          recorder.ondataavailable = recordingHandler;
           initOscilloscope();
         });
   }
@@ -108,16 +102,16 @@ $(() => {
    * Send recording to API
    * @param {event} e ondataavailable event
    */
-  function dataHandler(e) {
+  function recordingHandler(e) {
     console.log('data', e.data);
     console.log('data size ', bytesToSize(e.data.size));
     const formData = new FormData();
     formData.append('recording', e.data);
     const xhr = new XMLHttpRequest();
-    // xhr.responseType = 'formdata';
     xhr.open('POST', '/upload/recording', true);
     xhr.onload = function(ev) {
-      console.log('uploaded');
+      const id = JSON.parse(xhr.response).recording_id;
+      getResults(id);
     };
     xhr.upload.addEventListener('progress', updateProgress);
     xhr.upload.addEventListener('load', transferComplete);
@@ -154,5 +148,9 @@ $(() => {
       const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
     }
+  }
+
+  function getResults(id) {
+    window.location.replace(window.location.origin + '/results/' + id);
   }
 });
