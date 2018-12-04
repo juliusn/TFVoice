@@ -8,7 +8,7 @@ const UPLOAD_PATH = 'tmp/uploads/';
 const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 const dsBinder = require('../libraries/deepspeech/dsbinder');
-const Recording = require('../models/recording');
+const Recording = require('../models/Recording');
 const uploadWave = multer({
   dest: UPLOAD_PATH,
   fileFilter: function(req, file, cb) {
@@ -60,7 +60,7 @@ router.post('/recording', uploadRecording.single('recording'), (req, res) => {
         text: data,
       });
       recording.save().then((doc) => {
-        res.status(200).send({recording_id: recording.id});
+        res.status(201).send({recording_id: recording.id});
       });
     });
   }

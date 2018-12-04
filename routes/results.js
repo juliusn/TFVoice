@@ -1,21 +1,33 @@
 const express = require('express');
 const router = new express.Router();
-const Recording = require('../models/recording');
+const Recording = require('../models/Recording');
+const Word = require('../models/Word');
 
 router.get('/:id', function(req, res, next) {
   const id = req.params.id;
-  Recording.findById(id).then((recording) => {
-    console.log('Recording found', recording);
+  let recording;
+  const recQuery = Recording.findById(id);
+  recQuery.exec(recQueryHandler);
+
+  function recQueryHandler(error, doc) {
+    if (error) return next(error);
+    recording = doc;
+    const wordQuery = Word.find({});
+    wordQuery.exec(wordQueryHandler);
+  }
+
+  function wordQueryHandler(error, docs) {
+    if (error) return next(error);
+    const wordsArray = docs.map((word) => {
+      return word.word;
+    });
     res.render('results',
         {
           title: 'VoiceX Recording Results',
           recording: recording,
-          result: wordCount(['um', 'uh', 'well'], recording.text),
+          result: wordCount(wordsArray, recording.text),
         });
-  }).catch((error) => {
-    console.error(error);
-    throw error;
-  });
+  }
 });
 
 function wordCount(wordsToCount, text) {

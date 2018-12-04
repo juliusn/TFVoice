@@ -1,0 +1,90 @@
+div.row
+  div.col-lg-12
+    form#form-add-word.form-inline
+      div.form-group
+        div.input-group
+          input#input-word.form-control(type='text', name='word', placeholder='Add word...')
+          button.btn.btn-primary(type='submit') +
+
+    div#alert.alert.alert-danger.alert-dismissible.fade(role='alert')
+      strong#message-title
+      span#message-content
+      button.close(type='button', data-dismiss='alert', aria-label='Close')
+        span(aria-hidden=true) &times;
+
+    ul#words.list-group
+
+script.
+  updateWords();
+  document.getElementById('form-add-word').addEventListener('submit', submit, false);
+  function submit(event) {
+    event.preventDefault();
+    const form = document.getElementById('form-add-word');
+    const formData = new FormData(form);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/words', true);
+    xhr.onload = function() {
+      if (xhr.status === 201) {
+        updateWords();
+      } else {
+        showAlert(xhr.status, xhr.responseText);
+      }
+    };
+    xhr.send(formData);
+  }
+
+  function updateWords() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/words', true);
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+        showWords(JSON.parse(xhr.response))
+      } else {
+        showAlert(xhr.status, xhr.responseText);
+      }
+    }
+    xhr.send();
+  }
+
+  function showAlert(statusCode, message) {
+    $('#message-title').html(`Error ${statusCode}: `);
+    $('#message-content').html(message);
+    $('#alert').addClass('show');
+  }
+
+  function showWords(words) {
+    const ul = document.getElementById('words');
+    ul.innerHTML = '';
+    for (const word of words) {
+      const li = document.createElement('li');
+      li.id = word._id;
+      li.classList.add('list-group-item');
+      li.classList.add('clearfix');
+      const button = document.createElement('button');
+      button.innerHTML = 'X';
+      button.classList.add('btn');
+      button.classList.add('btn-xs');
+      button.classList.add('btn-primary');
+      button.addEventListener('click', removeWord, false);
+      const a = document.createElement('a');
+      a.innerHTML = word.word;
+      li.appendChild(button);
+      li.appendChild(a);
+      ul.appendChild(li);
+    }
+    const listDiv = document.g
+  }
+
+  function removeWord(event) {
+    const id = event.path[1].id;
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/words/delete/' + id, true);
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+        updateWords();
+      } else {
+        showAlert(xhr.status, xhr.responseText);
+      }
+    }
+    xhr.send();
+  }

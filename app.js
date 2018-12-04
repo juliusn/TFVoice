@@ -2,12 +2,14 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const lessMiddleware = require('less-middleware');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const indexRouter = require('./routes/index');
 const uploadRouter = require('./routes/upload');
 const resultsRouter = require('./routes/results');
+const wordsRouter = require('./routes/words');
 const Server = require('socket.io');
 const io = new Server();
 const app = express();
@@ -18,9 +20,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/d3', express.static(path.join(__dirname, '/node_modules/d3/dist/')));
@@ -53,6 +54,7 @@ io.on('connect', (socket) => {
 app.use('/', indexRouter);
 app.use('/upload', uploadRouter);
 app.use('/results', resultsRouter);
+app.use('/words', wordsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
