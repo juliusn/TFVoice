@@ -31,7 +31,7 @@ router.post('/', upload.fields([]), (req, res, next) => {
 
   function saveWord() {
     const word = new Word({
-      word: req.body.word,
+      word: req.body.word.toLowerCase(),
     });
     word.save((error) => {
       if (error) return next(error);
