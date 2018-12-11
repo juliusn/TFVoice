@@ -4,7 +4,7 @@ root = exports ? this
 Bubbles = () ->
   # standard variables accessible to
   # the rest of the functions inside Bubbles
-  width = 980
+  width = 600
   height = 510
   data = []
   node = null
@@ -410,22 +410,6 @@ root.plotData = (selector, data, plot) ->
     .datum(data)
     .call(plot)
 
-### 
-texts = [
-  {key:"sherlock",file:"top_sherlock.csv",name:"The Adventures of Sherlock Holmes"}
-  {key:"aesop",file:"top_aesop.csv",name:"Aesop's Fables"}
-  {key:"alice",file:"alice.csv",name:"Alice's Adventures in Wonderland"}
-  {key:"gulliver",file:"top_gulliver.csv",name:"Gulliver's Travels"}
-  {key:"test",file:"test.csv",name:"Test Words"}
-  {key:"test1",file:"test.json",name:"Test 1"}
-  {key:"test2",file:"test2.json",name:"Test 2"}
-]
-###
-texts = [
-  {key:"audio1",file:"test.json",name:"Audio 1"}
-  {key:"audio2",file:"test2.json",name:"Audio 2"}
-]
-
 # ---
 # jQuery document ready.
 # ---
@@ -433,21 +417,9 @@ $ ->
   # create a new Bubbles chart
   plot = Bubbles()
 
-  # ---
-  # function that is called when
-  # data is loaded
-  # ---
-  # display = (data) ->
-  #   plotData("#vis", data, plot)
-
   # we are storing the current text in the search component
   # just to make things easy
   key = decodeURIComponent(location.search).replace("?","")
-  text = texts.filter((t) -> t.key == key)[0]
-
-  # default to the first text if something gets messed up
-  if !text
-    text = texts[0]
 
   # select the current text in the drop-down
   $("#text-select").val(key)

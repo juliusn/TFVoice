@@ -103,6 +103,7 @@ $(() => {
    * @param {event} e ondataavailable event
    */
   function recordingHandler(e) {
+    disableRecButton();
     console.log('data', e.data);
     console.log('data size ', bytesToSize(e.data.size));
     const formData = new FormData();
@@ -112,6 +113,7 @@ $(() => {
     xhr.onload = function(ev) {
       const id = JSON.parse(xhr.response).recording_id;
       getResults(id);
+      enableRecButton();
     };
     xhr.upload.addEventListener('progress', updateProgress);
     xhr.upload.addEventListener('load', transferComplete);
@@ -152,5 +154,18 @@ $(() => {
 
   function getResults(id) {
     window.location.replace(window.location.origin + '/results/' + id);
+  }
+
+  function disableRecButton() {
+    $('#toggle-recording').prop('disabled', true);
+
+    $('#icon-spinner').attr('hidden', false);
+    $('#icon-rec').attr('hidden', true);
+  }
+
+  function enableRecButton() {
+    $('toggle-recording').prop('disabled', false);
+    $('#icon-spinner').attr('hidden', true);
+    $('#icon-rec').attr('hidden', false);
   }
 });

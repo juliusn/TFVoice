@@ -18,16 +18,7 @@ block body
 
         li.nav-item.dropdown
           button.btn.btn-secondary.dropdown-toggle#dd-recordings(data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Recordings
-          div.dropdown-menu(aria-labelledby='dd-recordings')
-            a.dropdown-item(href='#') Recording 2018-11-12
-            a.dropdown-item(href='#') Upload 2018-11-10
-            a.dropdown-item(href='#') Upload 2018-11-08
-            a.dropdown-item(href='#') Recording 2018-11-04
-            a.dropdown-item(href='#') Upload 2018-11-04
-            a.dropdown-item(href='#') Recording 2018-11-01
-            a.dropdown-item(href='#') Recording 2018-10-29
-            a.dropdown-item(href='#') Recording 2018-10-28
-            a.dropdown-item(href='#') Recording 2018-10-21
+          div#menu-recordings.dropdown-menu(aria-labelledby='dd-recordings')
 
         li.nav-item
           button.btn.btn-secondary Progress
@@ -36,13 +27,15 @@ block body
         select#inputdevices
         canvas(width='50' height='30')#visualiser
         button.btn.btn-danger#toggle-recording Record
-          img(src='/images/record.png').icon-user.float-left
+          i#icon-spinner.fa.fa-cog.fa-spin.fa-fw.float-left(hidden='true')
+          img#icon-rec(src='/images/record.png').icon-user.float-left
 
   block content
 
 
 block scripts
   script(type='text/javascript' src='/javascripts/record.js')
+  script(type='text/javascript' src='/javascripts/recordings.js')
   script(type='text/javascript' src='/socket.io/socket.io.js')
   script.
     $(document).ready(function() {

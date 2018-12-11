@@ -10,6 +10,7 @@ const indexRouter = require('./routes/index');
 const uploadRouter = require('./routes/upload');
 const resultsRouter = require('./routes/results');
 const wordsRouter = require('./routes/words');
+const recordingsRouter = require('./routes/recordings');
 const Server = require('socket.io');
 const io = new Server();
 const app = express();
@@ -55,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/upload', uploadRouter);
 app.use('/results', resultsRouter);
 app.use('/words', wordsRouter);
+app.use('/recordings', recordingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

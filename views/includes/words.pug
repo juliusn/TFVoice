@@ -1,5 +1,6 @@
 div.row
-  div.col-lg-12
+  div.col-md-3
+  div.col-md-6
     form#form-add-word.form-inline
       div.form-group
         div.input-group
@@ -13,6 +14,7 @@ div.row
         span(aria-hidden=true) &times;
 
     ul#words.list-group
+  div.col-md-3
 
 script.
   updateWords();
@@ -25,6 +27,7 @@ script.
     xhr.open('POST', '/words', true);
     xhr.onload = function() {
       if (xhr.status === 201) {
+        document.getElementById('input-word').value = '';
         updateWords();
       } else {
         showAlert(xhr.status, xhr.responseText);
@@ -58,14 +61,16 @@ script.
     for (const word of words) {
       const li = document.createElement('li');
       li.id = word._id;
-      li.classList.add('list-group-item');
-      li.classList.add('clearfix');
+      li.classList.add('list-group-item', 'clearfix');
       const button = document.createElement('button');
-      button.innerHTML = 'X';
-      button.classList.add('btn');
-      button.classList.add('btn-xs');
-      button.classList.add('btn-primary');
-      button.addEventListener('click', removeWord, false);
+      const i = document.createElement('i');
+      i.classList.add('fa', 'fa-remove', 'fa-lg');
+      button.classList.add('btn', 'btn-default', 'btn-xs');
+      button.addEventListener('click', eventListener, false);
+      function eventListener(event) {
+        removeWord(word._id);
+      }
+      button.appendChild(i);
       const a = document.createElement('a');
       a.innerHTML = word.word;
       li.appendChild(button);
@@ -75,8 +80,7 @@ script.
     const listDiv = document.g
   }
 
-  function removeWord(event) {
-    const id = event.path[1].id;
+  function removeWord(id) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/words/delete/' + id, true);
     xhr.onload = function() {
